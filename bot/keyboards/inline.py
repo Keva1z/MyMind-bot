@@ -60,3 +60,10 @@ def task_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="⬅️ Назад", callback_data=f"task:back")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def journal_keyboard(delete: bool = False) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text="📝 Записать", callback_data="journal:add")]
+    ]
+    if delete: keyboard[0].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)

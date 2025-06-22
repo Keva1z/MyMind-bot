@@ -87,6 +87,22 @@ class User(Base):
         cascade="all, delete-orphan"
     )
 
+    @property
+    def parsed_journal(self) -> str:
+        return "\n\n".join(self.list_journal)
+
+    @property
+    def list_journal(self) -> list[str]:
+        journal = self.journal.split("&&&&&&&&&&")
+        return [] if journal[0] in ['', ' '] else journal
+    
+    def delete_last_note(self) -> str:
+        journal = self.list_journal
+        if journal != []:
+            journal.pop()
+            return '&&&&&&&&&&'.join(journal)
+        return self.journal
+
     def __repr__(self) -> str:
         """String representation."""
         return f"User({_getrepr(self)})"

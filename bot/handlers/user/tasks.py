@@ -2,12 +2,11 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from bot.config import config
 import logging
 
 from database.methods.get import get_user
 from database.methods.update import update_user
-from database.models import Role, Task
+from database.models import Task
 from bot.states.base import CreateTask
 
 from bot.keyboards.inline import task_list_keyboard, task_keyboard
