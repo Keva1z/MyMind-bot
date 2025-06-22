@@ -61,9 +61,15 @@ def task_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-def journal_keyboard(delete: bool = False) -> InlineKeyboardMarkup:
-    keyboard = [
-        [InlineKeyboardButton(text="📝 Записать", callback_data="journal:add")]
-    ]
+def journal_keyboard(delete: bool = False, parsed_link: str|None = None) -> InlineKeyboardMarkup:
+    keyboard = []
+    if parsed_link is not None: keyboard.append([InlineKeyboardButton(text="🔗 Открыть приложение", url=parsed_link)])
+    keyboard.append([InlineKeyboardButton(text="📝 Записать", callback_data="journal:add")])
     if delete: keyboard[0].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def settings_keyboard() -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text="🔗 Изменить ссылку", callback_data="settings:link")]
+    ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

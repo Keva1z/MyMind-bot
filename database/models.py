@@ -7,6 +7,7 @@ from typing import Optional
 from sqlalchemy.types import TypeDecorator
 import json
 from sqlalchemy.ext.mutable import MutableList
+from datetime import datetime
 
 from typing import Any
 
@@ -60,6 +61,7 @@ class UserSettings(Base):
     )
 
     notes_link: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    time_format: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     timers: Mapped[Optional[dict[str, str]]] = mapped_column(JSON, nullable=True)
 
     user: Mapped["User"] = relationship(
@@ -67,6 +69,13 @@ class UserSettings(Base):
         back_populates="settings",
         uselist=False
     )
+
+    @property
+    def note_link_parsed(self) -> str:
+        if self.notes_link is not None:
+            if "{date}" in self.notes_link:
+                return "http://"+self.notes_link.format(date=datetime.strftime(datetime.now(), self.time_format))
+        return ""
 
 class User(Base):
     """User model."""

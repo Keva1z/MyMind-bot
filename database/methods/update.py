@@ -82,7 +82,7 @@ class update_user:
 
 class update_settings:
     @staticmethod
-    async def notes_link(userid: int, link: str) -> UserSettings | None:
+    async def notes_link(userid: int, link: str|None, time_format: str|None) -> UserSettings | None:
         async with async_session() as session:
             settings = await get_settings.by_userid(userid)
 
@@ -90,6 +90,7 @@ class update_settings:
                 return None
 
             settings.notes_link = link
+            settings.time_format = time_format
             session.add(settings)
             await session.commit()
             await session.refresh(settings)

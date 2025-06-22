@@ -6,3 +6,7 @@ class CreateTask(StatesGroup):
 
 class AddNote(StatesGroup):
     BODY = State()
+
+class SettingsLink(StatesGroup):
+    LINK = State()
+    TIME = State()
