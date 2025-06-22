@@ -1,6 +1,6 @@
-from database.models import User
+from database.models import User, UserSettings
 from database.main import async_session
-from database.methods.get import get_user
+from database.methods.get import get_user, get_settings
 
 class create_user:
     @staticmethod
@@ -15,3 +15,17 @@ class create_user:
                 await session.refresh(user)
                 
             return user
+        
+class create_settings:
+    @staticmethod
+    async def new(userid: int) -> UserSettings: # Создает нового пользователя
+        async with async_session() as session:
+            settings = await get_settings.by_userid(userid)
+
+            if not settings:
+                settings = UserSettings(userid=userid)
+                session.add(settings)
+                await session.commit()
+                await session.refresh(settings)
+                
+            return settings

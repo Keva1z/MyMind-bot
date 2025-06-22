@@ -1,4 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from database.models import Task
 
 def admin_panel_keyboard() -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(
@@ -42,3 +43,20 @@ def confirm_keyboard(action: str) -> InlineKeyboardMarkup:
         ]
     )
     return keyboard
+
+def task_list_keyboard(tasks: list[Task]) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text=f"{'✅' if tasks[id].is_completed else '❌'} {tasks[id].name}", callback_data=f"tasks:{id}")] for id in range(len(tasks))
+    ]
+    keyboard.append([InlineKeyboardButton(text=f" ", callback_data=f"tasks:SKIP")],)
+    keyboard.append([InlineKeyboardButton(text=f"📝 Добавить", callback_data=f"tasks:add")])
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def task_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text=f"{'✅' if task.is_completed else '❌'}", callback_data=f"task:status:{id}"),
+         InlineKeyboardButton(text=f"🗑 Удалить", callback_data=f"task:delete:{id}")],
+        [InlineKeyboardButton(text="⬅️ Назад", callback_data=f"task:back")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)

@@ -8,7 +8,7 @@ import logging
 from bot.filters.role import RoleFilter
 from database.models import Role
 
-from database.methods.create import create_user
+from database.methods.create import create_user, create_settings
 from database.methods.update import update_user
 
 logger = logging.getLogger(__name__)
@@ -20,8 +20,9 @@ async def cmd_start(message: Message, state: FSMContext):
     """Handle /start command"""
     logger.info(f"User {message.from_user.id} started bot")
     
-    # Create user if not exists
+    # Create user and settings if not exists
     user = await create_user.new(message.from_user.id, message.from_user.username)
+    await create_settings.new(message.from_user.id)
 
     # Update username if it changed
     if message.from_user.username != user.username:
@@ -32,4 +33,4 @@ async def cmd_start(message: Message, state: FSMContext):
 
     await state.clear()
 
-    await message.answer(f"Привет, {user.username}! Я заготовка бота.")
+    await message.answer(f"Привет, {user.username}! Я бот - помощник для жизни. напиши /help")
