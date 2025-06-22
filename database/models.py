@@ -24,8 +24,27 @@ class User(Base):
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     userid: Mapped[int] = mapped_column(BigInteger, nullable=False)
-    username: Mapped[str] = mapped_column(String(100), nullable=False)
+    username: Mapped[str] = mapped_column(String(100), nullable=True)
     role: Mapped[Role] = mapped_column(SQLEnum(Role), nullable=False, default=Role.USER)
+
+    # Daily
+    tasks: Mapped[dict[str, str]] = mapped_column(JSON, nullable=True)
+    journal: Mapped[str] = mapped_column(String(10000), nullable=False, default='')
 
     def __repr__(self):
         return f"User({_getrepr(self)})"
+    
+class UserSettings(Base):
+    __tablename__ = "settings"
+
+    userid: Mapped[int] = mapped_column(BigInteger, nullable=False, primary_key=True)
+
+    # Daily Notes
+    notes_link: Mapped[str] = mapped_column(String(100), nullable=True)
+    notes_timer: Mapped[dict[str, str]] = mapped_column(JSON, nullable=True)
+
+    # Affirmations
+    # * Nothing here until i can imagine smth
+
+    # Timers
+    timers: Mapped[dict[str, str]] = mapped_column(JSON, nullable=True)
