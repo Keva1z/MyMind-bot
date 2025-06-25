@@ -65,7 +65,7 @@ def journal_keyboard(delete: bool = False, parsed_link: str|None = None) -> Inli
     keyboard = []
     if parsed_link is not None: keyboard.append([InlineKeyboardButton(text="🔗 Открыть приложение", url=parsed_link)])
     keyboard.append([InlineKeyboardButton(text="📝 Записать", callback_data="journal:add")])
-    if delete: keyboard[0].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
+    if delete: keyboard[0 if parsed_link is None else 1].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 def settings_keyboard() -> InlineKeyboardMarkup:

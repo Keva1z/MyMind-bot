@@ -21,8 +21,8 @@ async def settings(message: Message, state: FSMContext):
     """Handle /settings command"""
     user = await get_user.by_userid(message.from_user.id)
 
-    await message.answer("ВРЕМЕННО ОТКЛЮЧЕН")
-    return
+    # await message.answer("ВРЕМЕННО ОТКЛЮЧЕН")
+    # return
 
     text = f"""⚙️ <b>НАСТРОЙКИ</b>
     

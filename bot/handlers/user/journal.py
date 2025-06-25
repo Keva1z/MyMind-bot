@@ -28,7 +28,7 @@ async def journal(message: Message, state: FSMContext, edit: bool = False, user:
 
 {f'<pre>{user.parsed_journal}</pre>' if user.parsed_journal != '' else 'Журнал пока пуст...'}"""
     
-    keyboard = journal_keyboard(user.list_journal != [])
+    keyboard = journal_keyboard(user.list_journal != [], user.settings.note_link_parsed)
     if edit:
         await message.edit_text(text=text, reply_markup=keyboard, parse_mode='HTML')
     else:

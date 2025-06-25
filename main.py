@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher
 from bot.config import config
 from bot.handlers import setup_handlers
 from database.main import async_main
-from bot.config import config
+from service.schedule.scheduler import DailyScheduler
 
 import logging, asyncio
 
@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 async def on_startup():
     await async_main() # Initialize database
+    scheduler = DailyScheduler(bot)
 
     setup_handlers(dp)
     logging.info("Bot started")

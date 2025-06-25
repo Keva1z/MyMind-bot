@@ -74,7 +74,7 @@ class UserSettings(Base):
     def note_link_parsed(self) -> str:
         if self.notes_link is not None:
             if "{date}" in self.notes_link:
-                return "http://"+self.notes_link.format(date=datetime.strftime(datetime.now(), self.time_format))
+                return self.notes_link.format(date=datetime.strftime(datetime.now(), self.time_format))
         return ""
 
 class User(Base):
