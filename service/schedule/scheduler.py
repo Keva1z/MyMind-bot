@@ -41,11 +41,23 @@ class DailyScheduler:
             date = datetime.strftime(datetime.now(), "%d.%m.%Y"),
             time = datetime.strftime(datetime.now(), "%H:%M")
 
+            user_info = f"""Имя: {user.info.name}
+Возраст: {user.info.age}
+Город: {user.info.city}
+Работа: {user.info.job}
+Хобби: {user.info.hobby}
+Мечта: {user.info.dream}
+Характер: {user.info.personality}
+Пожелания в ответах ИИ:
+{user.info.wishes}"""
+
             prompt = prompts.review.format(
                 date = date,
                 time = time,
                 tasks = tasks,
-                journal = journal
+                journal = journal,
+                user_ask = "",
+                user_info = user_info
             )
             sent = True
             while sent:

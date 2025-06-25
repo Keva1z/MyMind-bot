@@ -77,6 +77,32 @@ class UserSettings(Base):
                 return self.notes_link.format(date=datetime.strftime(datetime.now(), self.time_format))
         return ""
 
+class UserInfo(Base):
+    """User info model."""
+    __tablename__ = "info"
+
+    userid: Mapped[int] = mapped_column(
+        BigInteger, 
+        ForeignKey("users.userid", ondelete="CASCADE"), 
+        nullable=False, 
+        primary_key=True
+    )
+
+    name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    age: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    job: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    dream: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    city: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    hobby: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    personality: Mapped[Optional[str]] = mapped_column(String(1000), nullable=True)
+    wishes: Mapped[Optional[str]] = mapped_column(String(1000), nullable=True)
+
+    user: Mapped["User"] = relationship(
+        "User",
+        back_populates="info",
+        uselist=False
+    )
+
 class User(Base):
     """User model."""
     __tablename__ = "users"
@@ -91,6 +117,13 @@ class User(Base):
 
     settings: Mapped[Optional[UserSettings]] = relationship(
         "UserSettings",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+    info: Mapped[Optional[UserInfo]] = relationship(
+        "UserInfo",
         back_populates="user",
         uselist=False,
         cascade="all, delete-orphan"

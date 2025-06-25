@@ -1,5 +1,5 @@
-from database.models import User, Role, UserSettings, Task
-from database.methods.get import get_user, get_settings
+from database.models import User, Role, UserSettings, Task, UserInfo
+from database.methods.get import get_user, get_settings, get_info
 from database.main import async_session
 
 class update_user:
@@ -95,3 +95,108 @@ class update_settings:
             await session.commit()
             await session.refresh(settings)
             return settings
+        
+class update_userinfo:
+    @staticmethod
+    async def name(userid: int, name: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.name = name
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+    
+    @staticmethod
+    async def age(userid: int, age: int|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.age = age
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+    
+    @staticmethod
+    async def job(userid: int, job: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.job = job
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+        
+    @staticmethod
+    async def dream(userid: int, dream: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.dream = dream
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+        
+    @staticmethod
+    async def city(userid: int, city: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.city = city
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+        
+    @staticmethod
+    async def hobby(userid: int, hobby: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.hobby = hobby
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+        
+    @staticmethod
+    async def personality(userid: int, personality: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.personality = personality
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info
+
+    @staticmethod
+    async def wishes(userid: int, wishes: str|None) -> UserInfo|None:
+        async with async_session() as session:
+            info = await get_info.by_userid(userid)
+            if not info:
+                return None
+            
+            info.wishes = wishes
+            session.add(info)
+            await session.commit()
+            await session.refresh(info)
+            return info

@@ -63,13 +63,30 @@ def task_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
 
 def journal_keyboard(delete: bool = False, parsed_link: str|None = None) -> InlineKeyboardMarkup:
     keyboard = []
-    if parsed_link is not None: keyboard.append([InlineKeyboardButton(text="🔗 Открыть приложение", url=parsed_link)])
+    if parsed_link != '': keyboard.append([InlineKeyboardButton(text="🔗 Открыть приложение", url=parsed_link)])
     keyboard.append([InlineKeyboardButton(text="📝 Записать", callback_data="journal:add")])
-    if delete: keyboard[0 if parsed_link is None else 1].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
+    if delete: keyboard[0 if parsed_link == '' else 1].append(InlineKeyboardButton(text="🗑 Удалить", callback_data="journal:delete"))
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 def settings_keyboard() -> InlineKeyboardMarkup:
     keyboard = [
         [InlineKeyboardButton(text="🔗 Изменить ссылку", callback_data="settings:link")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def personal_keyboard(personal: dict[str, str]) -> InlineKeyboardMarkup:
+    keyboard = []
+    step = []
+    for k, v in personal.items():
+        step.append(InlineKeyboardButton(text=f"🏷 {v[0]}", callback_data=f"personal:{k}"))
+        if len(step) % 3 == 0:
+            keyboard.append(step)
+            step = []
+    keyboard.append(step)
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def personal_none_keyboard() -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text="🔄 Убрать значение", callback_data="personal:none")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)

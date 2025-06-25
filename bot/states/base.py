@@ -10,3 +10,6 @@ class AddNote(StatesGroup):
 class SettingsLink(StatesGroup):
     LINK = State()
     TIME = State()
+
+class PersonalChange(StatesGroup):
+    CHANGE = State()

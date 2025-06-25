@@ -6,7 +6,7 @@ from aiogram.fsm.storage.base import StorageKey
 import logging
 
 from bot.filters.role import RoleFilter
-from database.models import Role, User, Enum, UserSettings, Task
+from database.models import Role, User, Enum, UserSettings, Task, UserInfo
 
 from database.methods.get import get_user
 from database.methods.delete import delete_user
@@ -22,14 +22,14 @@ router.message.filter(RoleFilter(role=[Role.SUPERADMIN, Role.ADMIN]))
 def get_other_repr(object) -> str:
     if isinstance(object, Enum):
         return f"`{object.value}`"
-    if isinstance(object, UserSettings):
+    if isinstance(object, UserSettings) or isinstance(object, UserInfo):
         return "\n  - "+"\n  - ".join(f"*{k}:* {get_other_repr(v)}" for k, v in sorted(object.__dict__.items()) if not k.startswith('_'))
     if isinstance(object, list):
         if len(object) == 0: return '`None`'
         if isinstance(object[0], Task):
             object: list[Task] = object
             return "\n  - "+"\n  - ".join(f"{'✅' if task.is_completed else '❌'} {task.name}" for task in object)
-    return f"`{object}`"
+    return f"`{object[:15] if isinstance(object, str) else object}`"
 
 def get_user_repr(user: User):
     return "\n".join(f"*{k}:* {get_other_repr(v)}" for k, v in sorted(user.__dict__.items()) if not k.startswith('_'))

@@ -22,6 +22,7 @@ async def help(message: Message, state: FSMContext):
 
 /help - Данное меню
 /settings - Настройки бота
+/personal - Персональная информация
 {'\n' if user.role not in [Role.ADMIN, Role.SUPERADMIN] else '/admin - Админ панель\n'}
 /review [ЗАПРОС] - Сделать комментарий по поводу сегодняшнего журнала и задач
 <i>Если написать что-то после /review то ИИ учтет это, но можно и не добавлять</i>

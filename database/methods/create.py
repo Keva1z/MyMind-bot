@@ -1,4 +1,4 @@
-from database.models import User, UserSettings
+from database.models import User, UserSettings, UserInfo
 from database.main import async_session
 from database.methods.get import get_user, get_settings
 
@@ -10,7 +10,11 @@ class create_user:
 
             if not user:
                 user = User(userid=userid, username=username)
+                settings = UserSettings(userid=userid)
+                info = UserInfo(userid=userid)
                 session.add(user)
+                session.add(settings)
+                session.add(info)
                 await session.commit()
                 await session.refresh(user)
                 

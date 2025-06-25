@@ -22,7 +22,6 @@ async def cmd_start(message: Message, state: FSMContext):
     
     # Create user and settings if not exists
     user = await create_user.new(message.from_user.id, message.from_user.username)
-    await create_settings.new(message.from_user.id)
 
     # Update username if it changed
     if message.from_user.username != user.username:
