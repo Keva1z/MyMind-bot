@@ -113,6 +113,7 @@ class User(Base):
     role: Mapped[Role] = mapped_column(SQLEnum(Role), nullable=False, default=Role.USER)
 
     tasks: Mapped[list[Task]] = mapped_column(MutableList.as_mutable(TaskListType), nullable=False, default=list)
+    routine_tasks: Mapped[list[Task]] = mapped_column(MutableList.as_mutable(TaskListType), nullable=False, default=list)
     journal: Mapped[str] = mapped_column(String(10000), nullable=False, default="")
 
     settings: Mapped[Optional[UserSettings]] = relationship(

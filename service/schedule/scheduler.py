@@ -36,6 +36,8 @@ class DailyScheduler:
 
         for user in users:
             tasks = "\n".join([f"{i}. {'✅' if task.is_completed else '❌'} {task.name}: {task.description}" for i, task in enumerate(user.tasks)])
+            routine = "\n".join([f"{i}. {'✅' if task.is_completed else '❌'} {task.name}: {task.description}" for i, task in enumerate(user.routine_tasks)])
+            if routine == '': routine = 'Рутинных задач поставлено...'
             if tasks == '': tasks = 'Задач пока не поставлено...'
             journal = user.parsed_journal if user.parsed_journal != '' else 'Пока в журнале пусто...'
             date = datetime.strftime(datetime.now(), "%d.%m.%Y"),
@@ -51,13 +53,13 @@ class DailyScheduler:
 Пожелания в ответах ИИ:
 {user.info.wishes}"""
 
-            prompt = prompts.review.format(
+            prompt = prompts.note.format(
                 date = date,
                 time = time,
+                user_info = user_info,
                 tasks = tasks,
-                journal = journal,
-                user_ask = "",
-                user_info = user_info
+                routine = routine,
+                journal = journal
             )
             sent = True
             while sent:
@@ -73,11 +75,11 @@ class DailyScheduler:
 
         for user in users:
             date = datetime.strftime(datetime.now(), "%d.%m.%Y")
-            task_text = '<pre>'+'\n'.join([f'- [{'x' if task.is_completed else ' '}] {task.name}: {task.description}' for task in user.tasks])+'</pre>' if user.tasks != [] else 'Журнал пока пуст...'
+            task_text = '<pre>'+'\n'.join([f'- [{'x' if task.is_completed else ' '}] {task.name}: {task.description}' for task in user.tasks])+'</pre>' if user.tasks != [] else 'Нет поставленных задач...'
 
             text = f"""<b>Сегодня:</b> <i>{date}</i>
 
-{f'<pre>{user.parsed_journal}</pre>' if user.parsed_journal != '' else 'Журнал пока пуст...'}
+{f'<pre>{user.parsed_journal}</pre>' if user.parsed_journal != '' else 'Журнал пуст...'}
 
 {task_text}"""
             
@@ -85,5 +87,7 @@ class DailyScheduler:
             
             await self.bot.send_message(chat_id=user.userid,text=text, parse_mode='HTML')
             await update_user.journal(user.userid, '')
-            for task in user.tasks:
+            for task, task_routine in zip(user.tasks, user.routine_tasks):
                 await update_user.remove_task(user.userid, task.name)
+                task_routine.change_status()
+                await update_user.add_routine_task(user.userid, task_routine)

@@ -27,11 +27,13 @@ async def review(message: Message, state: FSMContext):
     user = await get_user.by_userid(message.from_user.id)
 
     tasks = "\n".join([f"{i}. {'✅' if task.is_completed else '❌'} {task.name}: {task.description}" for i, task in enumerate(user.tasks)])
+    routine = "\n".join([f"{i}. {'✅' if task.is_completed else '❌'} {task.name}: {task.description}" for i, task in enumerate(user.routine_tasks)])
+    if routine == '': routine = 'Рутинных задач поставлено...'
     if tasks == '': tasks = 'Задач пока не поставлено...'
     journal = user.parsed_journal if user.parsed_journal != '' else 'Пока в журнале пусто...'
     date = datetime.strftime(datetime.now(), "%d.%m.%Y"),
     time = datetime.strftime(datetime.now(), "%H:%M")
-    user_ask = '' if text == '' else f'Доп.Запрос от пользователя: {text}'
+    user_ask = '' if text == '' else f'Пользователь просит: {text}\nОБЯЗАТЕЛЬНО выполняй задачу так, как просит пользователь!'
     user_info = f"""Телеграмм ЮЗ: @{message.from_user.username}
 Имя: {user.info.name}
 Возраст: {user.info.age}
@@ -47,6 +49,7 @@ async def review(message: Message, state: FSMContext):
         date = date,
         time = time,
         tasks = tasks,
+        routine = routine,
         journal = journal,
         user_ask = user_ask,
         user_info = user_info

@@ -4,6 +4,10 @@ class CreateTask(StatesGroup):
     NAME = State()
     DESCRIPTION = State()
 
+class CreateTaskRoutine(StatesGroup):
+    NAME = State()
+    DESCRIPTION = State()
+
 class AddNote(StatesGroup):
     BODY = State()
 

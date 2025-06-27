@@ -61,6 +61,23 @@ def task_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
+def task_routine_list_keyboard(tasks: list[Task]) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text=f"{'✅' if tasks[id].is_completed else '❌'} {tasks[id].name}", callback_data=f"routines:{id}")] for id in range(len(tasks))
+    ]
+    keyboard.append([InlineKeyboardButton(text=f" ", callback_data=f"routines:SKIP")],)
+    keyboard.append([InlineKeyboardButton(text=f"📝 Добавить", callback_data=f"routines:add")])
+
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+def task_routine_keyboard(task: Task, id: int) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(text=f"{'✅' if task.is_completed else '❌'}", callback_data=f"routine:status:{id}"),
+         InlineKeyboardButton(text=f"🗑 Удалить", callback_data=f"routine:delete:{id}")],
+        [InlineKeyboardButton(text="⬅️ Назад", callback_data=f"routine:back")]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
 def journal_keyboard(delete: bool = False, parsed_link: str|None = None) -> InlineKeyboardMarkup:
     keyboard = []
     if parsed_link != '': keyboard.append([InlineKeyboardButton(text="🔗 Открыть приложение", url=parsed_link)])

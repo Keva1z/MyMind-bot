@@ -79,6 +79,41 @@ class update_user:
             await session.commit()
             await session.refresh(user)
             return user
+        
+    @staticmethod
+    async def add_routine_task(userid: int, task: Task) -> User | None:
+        """Add a task to the user's task list."""
+        async with async_session() as session:
+            user = await get_user.by_userid(userid)
+            if not user:
+                return None
+            
+            id = -1
+            for ex_task in user.routine_tasks:
+                if ex_task.name.lower() == task.name.lower():
+                    id = user.routine_tasks.index(ex_task)
+            if id != -1: user.routine_tasks[id] = task
+            else: user.routine_tasks.append(task)
+
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+            return user
+
+    @staticmethod
+    async def remove_routine_task(userid: int, task_name: str) -> User | None:
+        """Remove a task by name from the user's task list."""
+        async with async_session() as session:
+            user = await get_user.by_userid(userid)
+            if not user:
+                return None
+            if not user.routine_tasks: return user
+            task_name = task_name.lower()
+            user.routine_tasks = [task for task in user.routine_tasks if task.name.lower() != task_name]
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+            return user
 
 class update_settings:
     @staticmethod
